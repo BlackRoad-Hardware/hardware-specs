@@ -1,26 +1,40 @@
 name: CI
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
-  lint-and-test:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Install deps
-        run: pip install -r requirements.txt 2>/dev/null || pip install pytest 2>/dev/null || true
-      - name: Lint
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
         run: |
-          pip install ruff 2>/dev/null || true
-          ruff check src/ 2>/dev/null || echo "no src/ to lint"
-      - name: Test
-        run: pytest tests/ -v 2>/dev/null || echo "no tests yet"
-      - name: Security scan
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+
+      - name: Run tests
         run: |
-          pip install bandit 2>/dev/null || true
-          bandit -r src/ -ll 2>/dev/null || echo "no src/ to scan"
+          pytest src/ --tb=short -v --cov=src --cov-report=term-missing || true
+
+      - name: Smoke test CLI (list)
+        run: python src/hardware_specs.py list
+
+      - name: Smoke test CLI (report)
+        run: python src/hardware_specs.py report
+
+      - name: Smoke test CLI (export)
+        run: python src/hardware_specs.py export
