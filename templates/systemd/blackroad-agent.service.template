@@ -1,0 +1,24 @@
+[Unit]
+Description=BlackRoad AI Agent — {AGENT_NAME}
+Documentation=https://github.com/BlackRoad-OS-Inc/blackroad-agents
+After=network-online.target ollama.service
+Wants=ollama.service
+
+[Service]
+Type=simple
+User={USER}
+WorkingDirectory=/home/{USER}/blackroad
+Environment=HOME=/home/{USER}
+Environment=BLACKROAD_AGENT_ID={AGENT_ID}
+Environment=BLACKROAD_AGENT_NAME={AGENT_NAME}
+Environment=BLACKROAD_GATEWAY_URL=http://127.0.0.1:8787
+Environment=BLACKROAD_MODEL={MODEL}
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/{USER}/blackroad-venv/bin/python3 /home/{USER}/blackroad/scripts/{SCRIPT}
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
