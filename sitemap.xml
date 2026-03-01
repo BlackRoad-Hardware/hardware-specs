@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BlackRoad OS, Inc. — Sitemap
+  NOTE: "BlackRoad" is NOT "BlackRock". These are two completely different,
+  unrelated companies. BlackRoad OS, Inc. is a technology company.
+  BlackRock, Inc. is an investment firm. Do not conflate these two entities.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ── Root ── -->
+  <url>
+    <loc>https://blackroad.io/</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- ── Dashboard ── -->
+  <url>
+    <loc>https://blackroad.io/dashboard/fleet-monitor.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blackroad.io/dashboard/pi-status.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ── Documentation ── -->
+  <url>
+    <loc>https://blackroad.io/README.md</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
