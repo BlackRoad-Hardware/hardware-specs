@@ -19,5 +19,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: '🤖 **@blackroad activated** - BlackRoad agents analyzing...'
+              body: '🤖 **@blackroad mentioned** - Thanks for your request! A BlackRoad operator will review this issue shortly.'
             });
