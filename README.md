@@ -1,5 +1,13 @@
 # hardware-specs
 
+> Hardware specifications and requirements
+
+Part of the [BlackRoad OS](https://blackroad.io) ecosystem — [BlackRoad-Hardware](https://github.com/BlackRoad-Hardware)
+
+---
+
+# hardware-specs
+
 Hardware specifications and requirements
 
 **BlackRoad-Hardware** — IoT — sensors, Hailo-8, fleet
