@@ -1,99 +1,139 @@
 # BlackRoad Pi Fleet — Hardware Specifications
-# Source of truth for all edge compute nodes
+# Source of truth for all compute nodes
+#
+# FOR LIVE DATA: Run the scan script
+#   ./scripts/fleet-scan.sh
+#
+# This file defines WHAT we own. Live status comes from the scan.
 
 fleet:
-  blackroad-pi:
-    hostname: blackroad-pi
-    ip: "192.168.4.64"
-    model: "Raspberry Pi 4 Model B"
+
+  alice:
+    model: "Raspberry Pi 5"
     ram: "8GB"
+    case: "Standard"
     storage:
       - type: microSD
-        capacity: "64GB"
-        class: "A2"
-      - type: NVMe
-        capacity: "256GB"
-        interface: USB3
-    cpu: "Cortex-A72 (4x @ 1.8GHz)"
-    os: "Raspberry Pi OS Lite (64-bit)"
-    role: PRIMARY
+        capacity: "16GB"
+    role: GATEWAY
     services:
-      - cloudflared
-      - ollama
-      - blackroad-gateway
-      - blackroad-agent
-    accessories:
-      - "WS2812B LED strip (60 LEDs)"
-      - "3.5\" touchscreen"
-    network:
-      interface: eth0
-      static_ip: "192.168.4.64"
-      cloudflare_tunnel: "52915859-da18-4aa6-add5-7bd9fcac2e0b"
+      - nginx (37 sites)
+      - Pi-hole (DNS filtering)
+      - PostgreSQL
+      - Qdrant (vector search)
+      - Redis (cache)
 
-  aria64:
-    hostname: aria64
-    ip: "192.168.4.38"
-    model: "Raspberry Pi 4 Model B"
+  cecilia:
+    model: "Raspberry Pi 5"
     ram: "8GB"
+    case: "Pironman 5-MAX (Dual NVMe, OLED, RGB fans, safe shutdown)"
+    storage:
+      - type: microSD
+      - type: NVMe
+        model: "Crucial P310 1TB"
+        interface: "PCIe Gen4"
+    accelerator:
+      model: "Hailo-8"
+      tops: 26
+      interface: "M.2"
+    role: INFERENCE
+    services:
+      - Ollama (16 models)
+      - MinIO (4 buckets)
+      - PostgreSQL
+      - InfluxDB
+      - Hailo-8 inference
+
+  octavia:
+    model: "Raspberry Pi 5"
+    ram: "8GB"
+    case: "Pironman 5-MAX (Dual NVMe, OLED, RGB fans, safe shutdown)"
     storage:
       - type: microSD
         capacity: "128GB"
-        class: "A2"
-    cpu: "Cortex-A72 (4x @ 1.8GHz)"
-    os: "Raspberry Pi OS Lite (64-bit)"
-    role: SECONDARY
-    agent_capacity: 22500
+      - type: NVMe
+        model: "Crucial P310 1TB"
+        interface: "PCIe Gen4"
+    accelerator:
+      model: "Hailo-8"
+      tops: 26
+      interface: "M.2"
+    role: PLATFORM
     services:
-      - ollama
-      - blackroad-agent
-      - pi-ops
-    network:
-      interface: eth0
-      static_ip: "192.168.4.38"
+      - Gitea (273 repos)
+      - Docker Swarm
+      - NATS v2.12.3
+      - 15 Workers (workerd)
+      - Deploy API (PaaS)
+      - Hailo-8 inference
 
-  alice:
-    hostname: raspberrypi
-    ip: "192.168.4.49"
-    model: "Raspberry Pi 4 Model B"
-    ram: "4GB"
-    storage:
-      - type: microSD
-        capacity: "32GB"
-        class: "A2"
-    os: "Raspberry Pi OS Lite (64-bit)"
-    role: TERTIARY
+  aria:
+    model: "Raspberry Pi 5"
+    ram: "8GB"
+    case: "ElectroCookie Aluminum Mini Tower (RGB ambient light, cooling fan)"
+    role: MONITORING
     services:
-      - blackroad-agent
-      - pi-ops
-    network:
-      interface: eth0
-      static_ip: "192.168.4.49"
+      - Headscale
+      - Cloudflared
+      - nginx
+      - InfluxDB
+      - Portainer
 
   lucidia:
-    hostname: lucidia
-    ip: "192.168.4.99"
-    model: "Raspberry Pi 4 Model B"
-    ram: "4GB"
-    os: "Raspberry Pi OS Lite (64-bit)"
-    role: ALTERNATE
-    services:
-      - blackroad-agent
-    network:
-      interface: wlan0
-      ip: "192.168.4.99"
-
-  cloud:
-    hostname: blackroad-infinity
-    ip: "159.65.43.12"
-    provider: "DigitalOcean"
-    model: "Droplet — s-4vcpu-8gb"
+    model: "Raspberry Pi 5"
     ram: "8GB"
+    case: "ElectroCookie Aluminum Mini Tower (RGB ambient light, cooling fan)"
     storage:
-      - type: SSD
-        capacity: "160GB"
-    os: "Ubuntu 22.04 LTS"
-    region: "nyc3"
-    role: CLOUD_BACKUP
+      - type: microSD
+        capacity: "256GB"
+      - type: USB
+        model: "SanDisk Extreme 1TB"
+    role: APPS
     services:
-      - blackroad-agent
-      - nginx
+      - nginx (530+ web apps)
+      - PowerDNS
+      - Ollama (6 models)
+      - GitHub Actions runners
+
+  remote-control-server:
+    model: "Raspberry Pi 4 Model B"
+    ram: "2GB"
+    case: "FPVERA Remote Control Server (ATX, HDMI capture, PoE, OLED)"
+    role: REMOTE_MANAGEMENT
+
+  pi400:
+    model: "Raspberry Pi 400 Computer Kit"
+    ram: "4GB"
+    role: WORKSTATION
+
+  pi-zero-2wh:
+    model: "Raspberry Pi Zero 2 WH Kit"
+    role: IOT_EDGE
+
+  pi-zero-w:
+    model: "Raspberry Pi Zero W (Black Case)"
+    role: IOT_EDGE
+
+  gematria:
+    provider: "DigitalOcean"
+    region: "nyc3"
+    role: EDGE
+    services:
+      - Caddy (151 domains)
+      - Ollama (6 models)
+      - PowerDNS (ns1)
+      - WireGuard hub
+
+  anastasia:
+    provider: "DigitalOcean"
+    region: "nyc1"
+    role: BACKUP
+    services:
+      - Caddy
+      - WireGuard
+
+  alexandria:
+    model: "MacBook Pro M1 2020"
+    ram: "16GB"
+    storage: "500GB SSD"
+    role: FOUNDER_WORKSTATION
